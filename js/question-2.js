@@ -11,7 +11,10 @@ const gameToHTML = (game) => `<div>
     </dl>
 </div>`
 
+const loading = '<div class="loading"></div>'
+
 async function getGames() {
+    document.querySelector(".games").innerHTML = loading;  
     try {
         const response = await fetch(url);
         const data = await response.json();

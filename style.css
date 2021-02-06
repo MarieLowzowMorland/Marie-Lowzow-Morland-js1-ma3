@@ -15,3 +15,16 @@
 .errorMessage {
     color: red;
 }
+
+th {
+    text-align: left;
+}
+
+td, th {
+    padding-left: 20px;
+    padding-top: 10px;
+}
+
+td:last-child {
+    text-align: center;
+}

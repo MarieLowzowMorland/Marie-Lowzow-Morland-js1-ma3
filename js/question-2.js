@@ -1,38 +1,42 @@
 // Question 2
-const url = "https://api.rawg.io/api/games?dates=2019-01-01,2019-12-31&ordering=-rating"
-
-const gameToHTML = (game) => `<div>
-    <h2>${game.name}</h2>
-    <dl>
-        <dt>Rating</dt>
-        <dd>${game.rating}</dd>
-        <dt>Number of tags</dt>
-        <dd>${game.tags.length}</dd>
-    </dl>
-</div>`
-
+const url = "https://api.rawg.io/api/games?dates=2019-01-01,2019-12-31&ordering=-rating";
 const loading = '<div class="loading"></div>';
 const errormessage ='<div class="errorMessage">Something went wrong... grab a cup of coffee and try again.</div>';
 
 const addToDOM = (html) => document.querySelector(".games").innerHTML = html;
+const gameToHtmlTableRow = (game) => 
+`<tr>
+    <td>${game.name}</td>
+    <td>${game.rating}</td>
+    <td>${game.tags.length}</td>
+</tr>`;
 
-async function getGames() {
+const getGames = async () => {
     addToDOM(loading);  
     try {
         //throw new Error("ouch, you really need coffee!");
         const response = await fetch(url);
         const data = await response.json();
-        const games = data.results;
-
-        addToDOM(games
+        const gameRows = data.results
             .slice(0,8)
-            .map(gameToHTML)
-            .join(""));
+            .map(gameToHtmlTableRow)
+            .join("");
+
+        addToDOM(
+            `<table>
+                <thead>
+                    <th>Name</th>
+                    <th>Rating</th>
+                    <th>Number of tags</th>
+                </thead>
+                <tbody>${gameRows}</tbody>
+            </table>`
+        );
     } catch (exception) {
-        addToDOM(errormessage)
+        console.log(exception);
+        addToDOM(errormessage);
     }
 }
 getGames();
 
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
-//https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl

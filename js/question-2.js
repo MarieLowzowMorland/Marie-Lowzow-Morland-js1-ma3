@@ -11,21 +11,25 @@ const gameToHTML = (game) => `<div>
     </dl>
 </div>`
 
-const loading = '<div class="loading"></div>'
+const loading = '<div class="loading"></div>';
+const errormessage ='<div class="errorMessage">Something went wrong... grab a cup of coffee and try again.</div>';
+
+const addToDOM = (html) => document.querySelector(".games").innerHTML = html;
 
 async function getGames() {
-    document.querySelector(".games").innerHTML = loading;  
+    addToDOM(loading);  
     try {
+        //throw new Error("ouch, you really need coffee!");
         const response = await fetch(url);
         const data = await response.json();
         const games = data.results;
 
-        document.querySelector(".games").innerHTML = games
+        addToDOM(games
             .slice(0,8)
             .map(gameToHTML)
-            .join("");
+            .join(""));
     } catch (exception) {
-
+        addToDOM(errormessage)
     }
 }
 getGames();
